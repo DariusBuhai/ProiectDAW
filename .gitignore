@@ -1,0 +1,5 @@
+App_Data/
+bin/
+obj/
+/Web.config
+.vs/
