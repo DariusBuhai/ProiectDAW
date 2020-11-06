@@ -1,4 +1,5 @@
-App_Data/
+*.mdf
+*.ldf
 bin/
 obj/
 /Web.config
