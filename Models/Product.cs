@@ -25,5 +25,6 @@ namespace ProiectDAW.Models
         public virtual Category Category { get; set; }
         public IEnumerable<SelectListItem> AllCategories { get; internal set; }
         public int Status { get; set; }
+        public virtual ICollection<Comment> Comments { get; set; }
     }
 }

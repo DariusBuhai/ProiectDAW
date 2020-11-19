@@ -9,7 +9,7 @@ namespace ProiectDAW.Controllers
 {
     public class ProductsController : Controller
     {
-        private Models.AppContext db = new Models.AppContext();
+        private Models.ApplicationDbContext db = new ApplicationDbContext();
         // GET: Products
         public ActionResult Index()
         {
@@ -18,7 +18,7 @@ namespace ProiectDAW.Controllers
             return View();
         }
         // Get: Product
-        public ActionResult View(int id)
+        public ActionResult Show(int id)
         {
             var product = db.Products.Find(id);
             return View(product);
@@ -28,7 +28,6 @@ namespace ProiectDAW.Controllers
         public ActionResult New()
         {
             Product product = new Product();
-            // preluam lista de categorii din metoda GetAllCategories()
             product.AllCategories = GetAllCategories();
             return View(product);
         }
@@ -36,16 +35,17 @@ namespace ProiectDAW.Controllers
         [HttpPost]
         public ActionResult New(Product product)
         {
+            product.AllCategories = GetAllCategories();
             try
             {
                 db.Products.Add(product);
                 db.SaveChanges();
-                TempData["message"] = "Articolul a fost adaugat!";
+                TempData["message"] = "Produsul a fost adaugat!";
                 return RedirectToAction("Index");
             }
             catch (Exception e)
             {
-                return View();
+                return View(product);
             }
         }
         [HttpDelete]
@@ -73,6 +73,7 @@ namespace ProiectDAW.Controllers
         [HttpPut]
         public ActionResult Edit(int id, Product requestProduct)
         {
+            requestProduct.AllCategories = GetAllCategories();
             try
             {
                 Product product = db.Products.Find(id);
@@ -86,7 +87,7 @@ namespace ProiectDAW.Controllers
             }
             catch (Exception e)
             {
-                return View();
+                return View(requestProduct);
             }
         }
         public IEnumerable<SelectListItem> GetAllCategories()

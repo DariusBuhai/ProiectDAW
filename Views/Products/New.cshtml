@@ -5,11 +5,11 @@
 
 <h2>Adaugare Produs</h2>
 <form method="POST" action="/Products/New">
-    @Html.Label("Title", "Titlu Articol")
+    @Html.Label("Title", "Titlu Produs")
     <br />
     @Html.TextBox("Title", null, new { @class = "form-control" })
     <br />
-    @Html.Label("Description", "Continut Articol")
+    @Html.Label("Description", "Descriere Produs")
     <br />
     @Html.TextArea("Description", null, new { @class = "form-control" })
     <br />
