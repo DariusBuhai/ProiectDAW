@@ -17,7 +17,7 @@
         </div>
 
         <div class="panel-footer">
-            <a class="btn btn-primary btn-sm" href="/Products/View/@product.ProductId">View</a>
+            <a class="btn btn-primary btn-sm" href="/Products/Show/@product.ProductId">View</a>
             <a class="btn btn-success btn-sm" href="/Products/Edit/@product.ProductId">Editare</a>
             <form class="pull-right" method="post" action="/Products/Delete/@product.ProductId">
                 @Html.HttpMethodOverride(HttpVerbs.Delete)
