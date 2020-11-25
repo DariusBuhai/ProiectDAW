@@ -3,8 +3,15 @@
     ViewBag.Title = "Produse";
 }
 
-<h2>Produse - Magazin Online</h2>
 
+@if (TempData.ContainsKey("message"))
+{
+    <br /><br />
+    <div class="alert alert-success">
+        @ViewBag.message
+    </div>
+}
+<h2>@ViewBag.Title - Magazin Online</h2>
 
 @foreach (var product in ViewBag.Products)
 {
