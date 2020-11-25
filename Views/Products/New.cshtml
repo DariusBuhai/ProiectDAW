@@ -1,6 +1,6 @@
 ﻿@model ProiectDAW.Models.Product
 @{
-    ViewBag.Title = "New";
+    ViewBag.Title = "Adaugare Produs";
 }
 
 <br />
@@ -8,7 +8,17 @@
 <br />
 <br />
 <hr />
-<h2>Adaugare Produs</h2>
+
+@if (TempData.ContainsKey("message"))
+{
+    <br />
+    <br />
+    <div class="alert alert-success">
+        @ViewBag.message
+    </div>
+}
+
+<h2>@ViewBag.Title</h2>
 <form method="POST" action="/Products/New">
 
     @Html.ValidationSummary(false, "", new { @class = "text-danger" })

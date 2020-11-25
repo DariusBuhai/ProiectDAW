@@ -1,6 +1,18 @@
 ﻿@model ProiectDAW.Models.Category
+@{
+    ViewBag.Title = "Editare Categorie";
+}
 
-<h2>Editare categorie</h2>
+@if (TempData.ContainsKey("message"))
+{
+    <br />
+    <br />
+    <div class="alert alert-success">
+        @ViewBag.message
+    </div>
+}
+
+<h2>@ViewBag.Title </h2>
 
 <form method="post" action="/Categories/Edit/@Model.CategoryId">
 
