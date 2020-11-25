@@ -12,15 +12,18 @@ namespace ProiectDAW.Models
     {
         [Key]
         public int ProductId { get; set; }
-        [Required]
+        [Required(ErrorMessage = "Titlul este obligatoriu")]
+        [StringLength(100, ErrorMessage = "Titlul nu poate avea mai mult de 100 de caractere")]
         public string Title { get; set; }
-        [Required]
+        [Required(ErrorMessage = "Descrierea produsului este obligatorie")]
+        [DataType(DataType.MultilineText)]
         public string Description { get; set; }
         public string Image { get; set; }
-        [Required]
+        [Required(ErrorMessage = "Pretul produsului este obligatoriu")]
         public int Price { get; set; }
         [Required]
         public int Rating { get; set; }
+        [Required(ErrorMessage = "Categoria este obligatorie")]
         public int CategoryId { get; set; }
         public virtual Category Category { get; set; }
         public IEnumerable<SelectListItem> AllCategories { get; internal set; }
