@@ -15,6 +15,10 @@ namespace ProiectDAW.Controllers
         {
             var products = db.Products;
             ViewBag.Products = products;
+            if (TempData.ContainsKey("message"))
+            {
+                ViewBag.Message = TempData["message"];
+            }
             return View();
         }
         // Get: Product
@@ -25,6 +29,7 @@ namespace ProiectDAW.Controllers
         }
 
         // Get: New
+        [Authorize(Roles = "Editor,Admin")]
         public ActionResult New()
         {
             Product product = new Product();
@@ -33,15 +38,20 @@ namespace ProiectDAW.Controllers
         }
         // Post: New
         [HttpPost]
+        [Authorize(Roles = "Editor,Admin")]
         public ActionResult New(Product product)
         {
             product.AllCategories = GetAllCategories();
             try
             {
-                db.Products.Add(product);
-                db.SaveChanges();
-                TempData["message"] = "Produsul a fost adaugat!";
-                return RedirectToAction("Index");
+                if (ModelState.IsValid)
+                {
+                    db.Products.Add(product);
+                    db.SaveChanges();
+                    TempData["message"] = "Produsul a fost adaugat!";
+                    return RedirectToAction("Index");
+                }
+                return View(product);
             }
             catch (Exception e)
             {
@@ -49,6 +59,7 @@ namespace ProiectDAW.Controllers
             }
         }
         [HttpDelete]
+        [Authorize(Roles = "Editor,Admin")]
         public ActionResult Delete(int id)
         {
             try
@@ -63,6 +74,7 @@ namespace ProiectDAW.Controllers
             }
         }
         // Get: Edit
+        [Authorize(Roles = "Editor,Admin")]
         public ActionResult Edit(int id)
         {
             Product product = db.Products.Find(id);
@@ -71,19 +83,24 @@ namespace ProiectDAW.Controllers
         }
         // Put: Edit
         [HttpPut]
+        [Authorize(Roles = "Editor,Admin")]
         public ActionResult Edit(int id, Product requestProduct)
         {
             requestProduct.AllCategories = GetAllCategories();
             try
             {
                 Product product = db.Products.Find(id);
-                if (TryUpdateModel(product))
+
+                if (ModelState.IsValid && TryUpdateModel(product))
                 {
                     product = requestProduct;
                     db.SaveChanges();
-                    TempData["message"] = "Produsul a fost editat";
+                    TempData["message"] = "Produsul a fost modificat!";
+                    return RedirectToAction("Index");
                 }
-                return RedirectToAction("Index");
+
+                return View(requestProduct);
+
             }
             catch (Exception e)
             {

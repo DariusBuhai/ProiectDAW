@@ -1,9 +1,9 @@
 ﻿
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "Produse";
 }
 
-<h2>Index</h2>
+<h2>Produse - Magazin Online</h2>
 
 
 @foreach (var product in ViewBag.Products)
@@ -13,6 +13,8 @@
 
         <div class="panel-body">
             <p class="pull-left">@product.Description</p>
+            <br /><br />
+            <span>Pret: @product.Price lei</span>
             <br />
         </div>
 
@@ -26,5 +28,6 @@
         </div>
     </div>
 }
-<br /><hr />
-<a class="btn btn-primary" href="/Products/New">Create Product</a>
+<br />
+<hr />
+<a class="btn btn-primary" href="/Products/New">Produs Nou</a>
