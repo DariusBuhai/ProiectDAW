@@ -6,7 +6,8 @@
 
 @if (TempData.ContainsKey("message"))
 {
-    <br /><br />
+    <br />
+    <br />
     <div class="alert alert-success">
         @ViewBag.message
     </div>
@@ -27,14 +28,21 @@
 
         <div class="panel-footer">
             <a class="btn btn-primary btn-sm" href="/Products/Show/@product.ProductId">View</a>
-            <a class="btn btn-success btn-sm" href="/Products/Edit/@product.ProductId">Editare</a>
-            <form class="pull-right" method="post" action="/Products/Delete/@product.ProductId">
-                @Html.HttpMethodOverride(HttpVerbs.Delete)
-                <button type="submit" class="btn btn-danger btn-sm">Sterge produs</button>
-            </form>
+            @if (User.IsInRole("Editor") || User.IsInRole("Admin"))
+            {
+                <a class="btn btn-success btn-sm" href="/Products/Edit/@product.ProductId">Editare</a>
+                <form class="pull-right" method="post" action="/Products/Delete/@product.ProductId">
+                    @Html.HttpMethodOverride(HttpVerbs.Delete)
+                    <button type="submit" class="btn btn-danger btn-sm">Sterge produs</button>
+                </form>
+            }
         </div>
     </div>
 }
 <br />
 <hr />
-<a class="btn btn-primary" href="/Products/New">Produs Nou</a>
+@if (User.IsInRole("Editor") || User.IsInRole("Admin"))
+{
+    <a class="btn btn-primary" href="/Products/New">Produs Nou</a>
+}
+

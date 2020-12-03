@@ -33,10 +33,7 @@
                         <li>@Html.ActionLink("Adaugare produs", "New", "Products")</li>
                     }
 
-                    @if (User.IsInRole("User"))
-                    {
-                        <li>@Html.ActionLink("Afisare produse", "Index", "Products")</li>
-                    }
+                    <li>@Html.ActionLink("Afisare produse", "Index", "Products")</li>
 
 
                 </ul>
