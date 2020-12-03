@@ -54,15 +54,15 @@ namespace ProiectDAW
             //   consumerKey: "",
             //   consumerSecret: "");
 
-            //app.UseFacebookAuthentication(
-            //   appId: "",
-            //   appSecret: "");
+            app.UseFacebookAuthentication(
+               appId: "788243148394380",
+               appSecret: "ed8f9c186636444c3719a0d7afa4a9b1");
 
-            //app.UseGoogleAuthentication(new GoogleOAuth2AuthenticationOptions()
-            //{
-            //    ClientId = "",
-            //    ClientSecret = ""
-            //});
+            app.UseGoogleAuthentication(new GoogleOAuth2AuthenticationOptions()
+            {
+                ClientId = "523881027110-rivdu1mn1te7osg97rufkpj04lkkr7nr.apps.googleusercontent.com",
+                ClientSecret = "lntaCCCl2lQkQ2ykY9YNbpOs"
+            });
         }
     }
 }
