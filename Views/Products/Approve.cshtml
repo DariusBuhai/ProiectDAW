@@ -1,0 +1,52 @@
+﻿
+@{
+    ViewBag.Title = "Aproba Produse";
+}
+
+
+@if (TempData.ContainsKey("message"))
+{
+    <br /><br />
+    <div class="alert alert-success">
+        @ViewBag.message
+    </div>
+}
+<br />
+<h2>@ViewBag.Title - Magazin Online</h2>
+
+<br />
+<a class="btn btn-primary" href="/Products/Index">Produse Aprobate</a>
+<br /><hr /><br />
+
+@foreach (var product in ViewBag.Products)
+{
+    if (!product.Approved)
+    {
+        <div class="panel panel-default">
+            <div class="panel-heading">@product.Title</div>
+
+            <div class="panel-body">
+                <strong class="pull-left">@product.Description</strong>
+                <br /><br />
+                <span>Pret: @product.Price lei</span>
+                <br /><br />
+                <span>Categorie: @product.Category.CategoryName</span>
+                <br /><br />
+                
+            </div>
+
+            <div class="panel-footer">
+                <a class="btn btn-success btn-sm" href="/Products/Edit/@product.ProductId">Editare</a>
+                <form class="pull-right" method="post" action="/Products/Delete/@product.ProductId">
+                    @Html.HttpMethodOverride(HttpVerbs.Delete)
+                    &nbsp;&nbsp;<button type="submit" class="btn btn-danger btn-sm">Sterge produs</button>
+                </form>
+                <form class="pull-right" method="post" action="/Products/Approve/@product.ProductId">
+                    <button type="submit" class="btn btn-success btn-sm">Aproba produs</button>
+                </form>
+            </div>
+        </div>
+    }
+}
+<br />
+

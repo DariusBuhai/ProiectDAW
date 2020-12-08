@@ -12,17 +12,23 @@
 <div class="panel panel-default">
     <div class="panel-heading">@Model.Title</div>
     <div class="panel-body">
-        Descriere produs: <strong>@Model.Description</strong>
+        <strong>@Model.Description</strong>
+        <br /><br />
+        <span>Pret: @Model.Price lei</span>
         <br /><br />
         <i class="glyphicon glyphicon-globe"></i> @Model.Category.CategoryName
         <br /><br />
-        <hr>
-        <a class="btn btn-success pull-left" href="/Products/Edit/@Model.ProductId">Modifica produs</a>
-        <form method="post" action="/Products/Delete/@Model.ProductId">
-            @Html.HttpMethodOverride(HttpVerbs.Delete)
-            <button class="btn btn-danger pull-right" type="submit">Sterge produs</button>
-        </form>
     </div>
+    @if (User.IsInRole("Editor") || User.IsInRole("Admin"))
+    {
+        <div class="panel-footer">
+            <a class="btn btn-success" href="/Products/Edit/@Model.ProductId">Modifica produs</a>
+            <form method="post" class="pull-right" action="/Products/Delete/@Model.ProductId">
+                @Html.HttpMethodOverride(HttpVerbs.Delete)
+                <button class="btn btn-danger " type="submit">Sterge produs</button>
+            </form>
+        </div>
+    }
 </div>
 
 
@@ -37,15 +43,18 @@
                     <p>@comm.Content</p>
                     <small class="pull-right">@comm.Date</small>
                 </div>
-                <div style="display: inline-block; float : left; margin-right: 15px">
-                    <a class="glyphicon glyphicon-pencil" href="/Comments/Edit/@comm.CommentId"></a>
-                </div>
-                <div style="display: inline-block; float : left">
-                    <form method="post" action="/Comments/Delete/@comm.CommentId">
-                        @Html.HttpMethodOverride(HttpVerbs.Delete)
-                        <button class="glyphicon glyphicon-trash" style="border: none; background: transparent" type="submit"></button>
-                    </form>
-                </div>
+                @if (User.IsInRole("Editor") || User.IsInRole("Admin") || User.IsInRole("User"))
+                {
+                    <div style="display: inline-block; float : left; margin-right: 15px">
+                        <a class="glyphicon glyphicon-pencil" href="/Comments/Edit/@comm.CommentId"></a>
+                    </div>
+                    <div style="display: inline-block; float : left">
+                        <form method="post" action="/Comments/Delete/@comm.CommentId">
+                            @Html.HttpMethodOverride(HttpVerbs.Delete)
+                            <button class="glyphicon glyphicon-trash" style="border: none; background: transparent" type="submit"></button>
+                        </form>
+                    </div>
+                }
             </div>
         </div>
         <div class="col-md-2"></div>
@@ -54,27 +63,31 @@
 }
 
 
-<div class="container">
-    <div class="row">
-        <div class="col-md-2">
-        </div>
-        <div class="col-md-8">
-            <div class="panel">
-                <form method="post" action="/Comments/New">
-                    <div class="panel-body">
-                        <input type="hidden" name="ProductId" value="@Model.ProductId" />
-                        <label>Continut comentariu</label>
-                        <br />
-                        <textarea class="form-control" name="Content"></textarea>
-                        <br />
-                        <button class="btn btn-success " type="submit">Adauga comentariu</button>
-                    </div>
-                </form>
+@if (User.IsInRole("Editor") || User.IsInRole("Admin") || User.IsInRole("User"))
+{
+    <div class="container">
+        <div class="row">
+            <div class="col-md-2">
             </div>
+            <div class="col-md-8">
+                <div class="panel">
+                    <form method="post" action="/Comments/New">
+                        <div class="panel-body">
+                            <input type="hidden" name="ProductId" value="@Model.ProductId" />
+                            <label>Continut comentariu</label>
+                            <br />
+                            <textarea class="form-control" name="Content"></textarea>
+                            <br />
+                            <button class="btn btn-success " type="submit">Adauga comentariu</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="col-md-2"></div>
         </div>
-        <div class="col-md-2"></div>
     </div>
-</div>
+}
+
 
 
 

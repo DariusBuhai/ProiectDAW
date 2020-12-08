@@ -168,6 +168,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\OrdersController.cs" />
     <Compile Include="Controllers\CategoriesController.cs" />
     <Compile Include="Controllers\CommentsController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
@@ -178,6 +179,7 @@
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
+    <Compile Include="Models\Orders.cs" />
     <Compile Include="Models\Category.cs" />
     <Compile Include="Models\Comment.cs" />
     <Compile Include="Models\IdentityModels.cs" />
@@ -213,6 +215,8 @@
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="Scripts\modernizr-2.8.3.js" />
+    <None Include="Views\Orders\Basket.cshtml" />
+    <None Include="Views\Orders\Checkout.cshtml" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
@@ -256,6 +260,7 @@
     <Content Include="Views\Products\Index.cshtml" />
     <Content Include="Views\Products\New.cshtml" />
     <Content Include="Views\Products\Show.cshtml" />
+    <Content Include="Views\Products\Approve.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
