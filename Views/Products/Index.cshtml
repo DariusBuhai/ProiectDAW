@@ -12,35 +12,51 @@
         @ViewBag.message
     </div>
 }
+<br />
 <h2>@ViewBag.Title - Magazin Online</h2>
+<br />
+@if (User.IsInRole("Admin"))
+{
+    <a class="btn btn-primary" href="/Products/Approve">Produse in Asteptare</a>
+    <br />
+    <hr />
+}
 
 @foreach (var product in ViewBag.Products)
 {
-    <div class="panel panel-default">
-        <div class="panel-heading">@product.Title</div>
+    if (product.Approved)
+    {
+        <div class="panel panel-default">
+            <div class="panel-heading">@product.Title</div>
 
-        <div class="panel-body">
-            <p class="pull-left">@product.Description</p>
-            <br /><br />
-            <span>Pret: @product.Price lei</span>
-            <br />
-        </div>
+            <div class="panel-body">
+                <strong class="pull-left">@product.Description</strong>
+                <br /><br />
+                <span>Pret: @product.Price lei</span>
+                <br /><br /><span>Categorie: @product.Category.CategoryName</span>
+                <br />
+            </div>
 
-        <div class="panel-footer">
-            <a class="btn btn-primary btn-sm" href="/Products/Show/@product.ProductId">View</a>
-            @if (User.IsInRole("Editor") || User.IsInRole("Admin"))
-            {
-                <a class="btn btn-success btn-sm" href="/Products/Edit/@product.ProductId">Editare</a>
-                <form class="pull-right" method="post" action="/Products/Delete/@product.ProductId">
-                    @Html.HttpMethodOverride(HttpVerbs.Delete)
-                    <button type="submit" class="btn btn-danger btn-sm">Sterge produs</button>
+            <div class="panel-footer">
+                <a class="btn btn-primary btn-sm" href="/Products/Show/@product.ProductId">Vizualizare</a>
+                @if (User.IsInRole("Editor") || User.IsInRole("Admin"))
+                {
+                    <a class="btn btn-success btn-sm" href="/Products/Edit/@product.ProductId">Editare</a>
+                    <form class="pull-right" method="post" action="/Products/Delete/@product.ProductId">
+                        @Html.HttpMethodOverride(HttpVerbs.Delete)
+                        &nbsp;&nbsp;<button type="submit" class="btn btn-danger btn-sm">Sterge produs</button>
+                    </form>
+                }
+                <form class="pull-right" method="post" action="/Orders/Basket/@product.ProductId">
+                    <button type="submit" class="btn btn-success btn-sm">Adauga in cos</button>
                 </form>
-            }
+            </div>
         </div>
-    </div>
+    }
 }
 <br />
 <hr />
+
 @if (User.IsInRole("Editor") || User.IsInRole("Admin"))
 {
     <a class="btn btn-primary" href="/Products/New">Produs Nou</a>

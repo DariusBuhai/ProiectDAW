@@ -12,6 +12,8 @@ namespace ProiectDAW.Models
     {
         [Key]
         public int ProductId { get; set; }
+        public string UserId { get; set; }
+        public virtual ApplicationUser User { get; set; }
         [Required(ErrorMessage = "Titlul este obligatoriu")]
         [StringLength(100, ErrorMessage = "Titlul nu poate avea mai mult de 100 de caractere")]
         public string Title { get; set; }
@@ -29,5 +31,6 @@ namespace ProiectDAW.Models
         public IEnumerable<SelectListItem> AllCategories { get; internal set; }
         public int Status { get; set; }
         public virtual ICollection<Comment> Comments { get; set; }
+        public bool Approved { get; set; }
     }
 }

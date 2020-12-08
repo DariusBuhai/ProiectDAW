@@ -7,6 +7,7 @@ using System.Web.Mvc;
 
 namespace ProiectDAW.Controllers
 {
+    [Authorize(Roles = "Admin,Editor,User")]
     public class CommentsController : Controller
     {
         private ProiectDAW.Models.ApplicationDbContext db = new ProiectDAW.Models.ApplicationDbContext();

@@ -1,4 +1,5 @@
-﻿using ProiectDAW.Models;
+﻿using Microsoft.AspNet.Identity;
+using ProiectDAW.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,12 +14,10 @@ namespace ProiectDAW.Controllers
         // GET: Products
         public ActionResult Index()
         {
-            var products = db.Products;
+            var products = db.Products.Include("Category").Include("User");
             ViewBag.Products = products;
             if (TempData.ContainsKey("message"))
-            {
                 ViewBag.Message = TempData["message"];
-            }
             return View();
         }
         // Get: Product
@@ -34,6 +33,8 @@ namespace ProiectDAW.Controllers
         {
             Product product = new Product();
             product.AllCategories = GetAllCategories();
+            product.UserId = User.Identity.GetUserId();
+            product.Approved = User.IsInRole("Admin");
             return View(product);
         }
         // Post: New
@@ -42,6 +43,8 @@ namespace ProiectDAW.Controllers
         public ActionResult New(Product product)
         {
             product.AllCategories = GetAllCategories();
+            product.UserId = User.Identity.GetUserId();
+            product.Approved = User.IsInRole("Admin");
             try
             {
                 if (ModelState.IsValid)
@@ -64,9 +67,19 @@ namespace ProiectDAW.Controllers
         {
             try
             {
-                db.Products.Remove(db.Products.Find(id));
-                db.SaveChanges();
-                return RedirectToAction("Index");
+                Product product = db.Products.Find(id);
+                if (product.UserId == User.Identity.GetUserId() || User.IsInRole("Admin"))
+                {
+                    db.Products.Remove(db.Products.Find(id));
+                    db.SaveChanges();
+                    TempData["message"] = "Produsul a fost sters!";
+                    return RedirectToAction("Index");
+                }
+                else
+                {
+                    TempData["message"] = "Nu aveti dreptul sa stergeti un produs care nu va apartine!";
+                    return RedirectToAction("Index");
+                }
             }
             catch (Exception e)
             {
@@ -79,7 +92,10 @@ namespace ProiectDAW.Controllers
         {
             Product product = db.Products.Find(id);
             product.AllCategories = GetAllCategories();
-            return View(product);
+            if(product.UserId == User.Identity.GetUserId() || User.IsInRole("Admin"))
+                return View(product);
+            TempData["message"] = "Nu aveti dreptul sa faceti modificari asupra unui produs care nu va apartine!";
+            return RedirectToAction("Index");
         }
         // Put: Edit
         [HttpPut]
@@ -87,18 +103,31 @@ namespace ProiectDAW.Controllers
         public ActionResult Edit(int id, Product requestProduct)
         {
             requestProduct.AllCategories = GetAllCategories();
+            requestProduct.UserId = User.Identity.GetUserId();
             try
             {
-                Product product = db.Products.Find(id);
-
-                if (ModelState.IsValid && TryUpdateModel(product))
+                if (ModelState.IsValid)
                 {
-                    product = requestProduct;
-                    db.SaveChanges();
-                    TempData["message"] = "Produsul a fost modificat!";
-                    return RedirectToAction("Index");
-                }
+                    Product product = db.Products.Find(id);
+                    if (product.Approved != requestProduct.Approved && !User.IsInRole("Admin"))
+                        requestProduct.Approved = product.Approved;
+                    if (product.UserId == User.Identity.GetUserId() || User.IsInRole("Admin"))
+                    {
+                        if (TryUpdateModel(product))
+                        {
+                            product = requestProduct;
+                            db.SaveChanges();
+                            TempData["message"] = "Produsul a fost modificat!";
+                            return RedirectToAction("Index");
+                        }
+                    }
+                    else
+                    {
+                        TempData["message"] = "Nu aveti dreptul sa faceti modificari asupra unui produs care nu va apartine!";
+                        return RedirectToAction("Index");
+                    }
 
+                }
                 return View(requestProduct);
 
             }
@@ -106,6 +135,29 @@ namespace ProiectDAW.Controllers
             {
                 return View(requestProduct);
             }
+        }
+        [Authorize(Roles = "Admin")]
+        public ActionResult Approve()
+        {
+            var products = db.Products.Include("Category").Include("User");
+            ViewBag.Products = products;
+            if (TempData.ContainsKey("message"))
+                ViewBag.Message = TempData["message"];
+            return View();
+        }
+        [HttpPost]
+        [Authorize(Roles = "Admin")]
+        public ActionResult Approve(int id)
+        {
+            Product product = db.Products.Find(id);
+            product.Approved = true;
+            if (TryUpdateModel(product))
+            {
+                db.SaveChanges();
+                TempData["message"] = "Produsul a fost aprobat!";
+                return RedirectToAction("Index");
+            }
+            return View();
         }
         public IEnumerable<SelectListItem> GetAllCategories()
         {
