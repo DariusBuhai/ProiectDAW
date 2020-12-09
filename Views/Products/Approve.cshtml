@@ -15,7 +15,8 @@
 <h2>@ViewBag.Title - Magazin Online</h2>
 
 <br />
-<a class="btn btn-primary" href="/Products/Index">Produse Aprobate</a>
+<a class="btn btn-primary" href="/Products/Index"><i class="glyphicon glyphicon-ok-circle"></i> &nbsp;Produse Aprobate</a>
+<a class="btn btn-primary" disabled href="#"><i class="glyphicon glyphicon-time"></i> &nbsp;Produse in Asteptare</a>
 <br /><hr /><br />
 
 @foreach (var product in ViewBag.Products)
@@ -27,22 +28,21 @@
 
             <div class="panel-body">
                 <strong class="pull-left">@product.Description</strong>
+                <br /><hr />
+                <span><i class="glyphicon glyphicon-bitcoin"></i> &nbsp;Pret: @product.Price lei</span>
                 <br /><br />
-                <span>Pret: @product.Price lei</span>
-                <br /><br />
-                <span>Categorie: @product.Category.CategoryName</span>
-                <br /><br />
-                
+                 <span><i class="glyphicon glyphicon-globe"></i> &nbsp;Categorie: @product.Category.CategoryName</span>
+                <br />
             </div>
 
             <div class="panel-footer">
-                <a class="btn btn-success btn-sm" href="/Products/Edit/@product.ProductId">Editare</a>
+                <a class="btn btn-success btn-sm" href="/Products/Edit/@product.ProductId"><i class="glyphicon glyphicon-edit"></i> &nbsp;Editare</a>
                 <form class="pull-right" method="post" action="/Products/Delete/@product.ProductId">
                     @Html.HttpMethodOverride(HttpVerbs.Delete)
-                    &nbsp;&nbsp;<button type="submit" class="btn btn-danger btn-sm">Sterge produs</button>
+                    &nbsp;&nbsp;<button type="submit" class="btn btn-danger btn-sm"><i class="glyphicon glyphicon-trash"></i> &nbsp;Sterge produs</button>
                 </form>
                 <form class="pull-right" method="post" action="/Products/Approve/@product.ProductId">
-                    <button type="submit" class="btn btn-success btn-sm">Aproba produs</button>
+                    <button type="submit" class="btn btn-success btn-sm"><i class="glyphicon glyphicon-ok"></i> &nbsp;Aproba produs</button>
                 </form>
             </div>
         </div>
