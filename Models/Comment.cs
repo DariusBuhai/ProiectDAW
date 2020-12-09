@@ -15,6 +15,7 @@ namespace ProiectDAW.Models
         public string Content { get; set; }
         public DateTime Date { get; set; }
         public int ProductId { get; set; }
+        public int Rating { get; set; }
         public virtual Product Product { get; set; }
     }
 }

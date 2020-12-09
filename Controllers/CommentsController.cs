@@ -7,7 +7,6 @@ using System.Web.Mvc;
 
 namespace ProiectDAW.Controllers
 {
-    [Authorize(Roles = "Admin,Editor,User")]
     public class CommentsController : Controller
     {
         private ProiectDAW.Models.ApplicationDbContext db = new ProiectDAW.Models.ApplicationDbContext();
@@ -61,6 +60,8 @@ namespace ProiectDAW.Controllers
                 if (TryUpdateModel(comm))
                 {
                     comm.Content = requestComment.Content;
+                    comm.Rating = requestComment.Rating;
+                    comm.Date = DateTime.Now;
                     db.SaveChanges();
                 }
                 return Redirect("/Products/Show/" + comm.ProductId);

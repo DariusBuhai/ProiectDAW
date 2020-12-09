@@ -24,7 +24,7 @@ namespace ProiectDAW.Models
         [Required(ErrorMessage = "Pretul produsului este obligatoriu")]
         public int Price { get; set; }
         [Required]
-        public int Rating { get; set; }
+        public int FinalRating { get; set; }
         [Required(ErrorMessage = "Categoria este obligatorie")]
         public int CategoryId { get; set; }
         public virtual Category Category { get; set; }
