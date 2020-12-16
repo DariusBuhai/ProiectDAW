@@ -27,17 +27,7 @@ namespace ProiectDAW.Controllers
             return View();
         }
 
-        public ActionResult Show(int id)
-        {
-            Category category = db.Categories.Find(id);
-            return View(category);
-        }
-
-        public ActionResult New()
-        {
-            return View();
-        }
-
+        
         [HttpPost]
         public ActionResult New(Category cat)
         {
@@ -52,20 +42,15 @@ namespace ProiectDAW.Controllers
                 }
                 else
                 {
-                    return View(cat);
+                    return RedirectToAction("Index");
                 }
             }
             catch (Exception e)
             {
-                return View(cat);
+                return RedirectToAction("Index");
             }
         }
 
-        public ActionResult Edit(int id)
-        {
-            Category category = db.Categories.Find(id);
-            return View(category);
-        }
 
         [HttpPut]
         public ActionResult Edit(int id, Category requestCategory)
@@ -84,11 +69,11 @@ namespace ProiectDAW.Controllers
                         return RedirectToAction("Index");
                     }
 
-                return View(requestCategory);
+                return RedirectToAction("Index");
             }
             catch (Exception e)
             {
-                return View(requestCategory);
+                return RedirectToAction("Index");
             }
         }
 
