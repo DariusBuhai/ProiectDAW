@@ -24,14 +24,23 @@
             }
         </div>
         <hr class="mb-4">
+        <form method="get" action="/Products/Index" id="searchForm">
+            <div class="input-group input-group-lg mb-5">
 
-        <div class="input-group input-group-lg mb-5">
-            <div class="input-group-prepend">
-                <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Sorteaza dupa</button>
-                <div class="dropdown-menu animated" x-placement="bottom-start" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(0px, 48px, 0px);"><a class="dropdown-item" href="#!">Transaction ID</a><a class="dropdown-item" href="#!">Invoice ID</a><a class="dropdown-item" href="#!">Name</a><a class="dropdown-item" href="#!">Email</a></div>
+                <div class="input-group-prepend show">
+                    <select name="sort" class="btn btn-primary" onchange="document.getElementById('searchForm').submit()">
+                        <option value="" class="bg-white text-black">Sorteaza dupa</option>
+                        <option value="price-asc" @(ViewBag.sort=="price-asc"?"selected":"") class="bg-white text-black">Pret crescator</option>
+                        <option value="price-desc" @(ViewBag.sort=="price-desc"?"selected":"") class="bg-white text-black">Pret descrescator</option>
+                        <option value="rating-asc" @(ViewBag.sort=="rating-asc"?"selected":"") class="bg-white text-black">Rating crescator</option>
+                        <option value="rating-desc" @(ViewBag.sort=="rating-desc"?"selected":"") class="bg-white text-black">Rating descrescator</option>
+                    </select>
+                </div>
+
+                <input name="search" class="form-control" type="text" placeholder="Cauta in produse..." value="@ViewBag.search">
+
             </div>
-            <input class="form-control" type="text" aria-label="Text input with dropdown button" placeholder="Cauta in produse...">
-        </div>
+        </form>
 
         @foreach (var product in ViewBag.Products)
         {

@@ -2,5 +2,4 @@
 *.ldf
 bin/
 obj/
-/Web.config
 .vs/
