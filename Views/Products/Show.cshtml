@@ -1,7 +1,7 @@
 ﻿@model ProiectDAW.Models.Product
 
 @{
-    ViewBag.Title = "View Product";
+    ViewBag.Title = Model.Title;
 }
 <br />
 <a class="btn btn-primary pull-left" href="/Products/Index"><i class="glyphicon glyphicon-chevron-left"></i>&nbsp; Inapoi la produse</a>
@@ -16,7 +16,7 @@
         <br /><hr />
         <span><i class="glyphicon glyphicon-bitcoin"></i> &nbsp;Pret: @Model.Price lei</span>
         <br /><br />
-        <i class="glyphicon glyphicon-globe"></i> @Model.Category.CategoryName
+        <i class="glyphicon glyphicon-globe"></i> &nbsp;@Model.Category.CategoryName
         <br /><br />
     </div>
     @if (User.IsInRole("Editor") || User.IsInRole("Admin"))
