@@ -24,6 +24,16 @@ namespace ProiectDAW.Controllers
         public ActionResult Show(int id)
         {
             var product = db.Products.Find(id);
+            var NrComments = 0;
+            foreach (Comment comm in db.Comments)
+            {
+                if (comm.ProductId == product.ProductId)
+                {
+                    product.FinalRating += comm.Rating;
+                    NrComments += 1;
+                }
+            }
+            product.FinalRating = product.FinalRating / NrComments;
             return View(product);
         }
 

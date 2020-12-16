@@ -12,6 +12,8 @@
 <div class="panel panel-default">
     <div class="panel-heading">@Model.Title</div>
     <div class="panel-body">
+        <small class="pull-right">Rating: @Model.FinalRating</small>
+        <br />
         <strong>@Model.Description</strong>
         <br /><hr />
         <span><i class="glyphicon glyphicon-bitcoin"></i> &nbsp;Pret: @Model.Price lei</span>
@@ -40,6 +42,7 @@
             <div class="col-md-2"></div>
             <div class="col-md-8">
                 <div>
+                    <small class="pull-right">Rating: @comm.Rating</small> <br>
                     <p>@comm.Content</p>
                     <small class="pull-right"><i class="glyphicon glyphicon-calendar"></i> &nbsp;@comm.Date</small>
                 </div>
@@ -78,6 +81,10 @@
                             <br />
                             <textarea class="form-control" name="Content"></textarea>
                             <br />
+                            <label for="rating">Rating produs(intre 1 si 5):</label>
+                            <br />
+                            <input type="number" id="rating" name="Rating" min="1" max="5">
+                            <br /> <br />
                             <button class="btn btn-success " type="submit"><i class="glyphicon glyphicon-plus"></i> &nbsp;Adauga comentariu</button>
                         </div>
                     </form>
