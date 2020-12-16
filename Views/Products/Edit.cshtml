@@ -4,51 +4,55 @@
     ViewBag.Title = "Editare Produs";
 }
 
-<br />
-<a class="btn btn-primary pull-left" href="/Products/Index"><i class="glyphicon glyphicon-chevron-left"></i>&nbsp; Inapoi la produse</a>
-<form method="post" action="/Products/Delete/@Model.ProductId">
-    @Html.HttpMethodOverride(HttpVerbs.Delete)
-    <button type="submit" class="btn btn-danger pull-right"><i class="glyphicon glyphicon-trash"></i>&nbsp; Sterge produs</button>
-</form>
-<br />
-<br />
-<hr />
+<section class="bg-light py-10">
+    <div class="container">
+        <br />
+        <a class="btn btn-primary pull-left" href="/Products/Index"><i class="glyphicon glyphicon-chevron-left"></i>&nbsp; Inapoi la produse</a>
+        <form method="post" action="/Products/Delete/@Model.ProductId">
+            @Html.HttpMethodOverride(HttpVerbs.Delete)
+            <button type="submit" class="btn btn-danger pull-right"><i class="glyphicon glyphicon-trash"></i>&nbsp; Sterge produs</button>
+        </form>
+        <br />
+        <br />
+        <hr />
 
-@if (TempData.ContainsKey("message"))
-{
-    <br /><br />
-    <div class="alert alert-success">
-        @ViewBag.message
+        @if (TempData.ContainsKey("message"))
+        {
+            <br /><br />
+            <div class="alert alert-success">
+                @ViewBag.message
+            </div>
+        }
+
+        <h2>@ViewBag.Title</h2>
+        @using (Html.BeginForm(actionName: "Edit", controllerName: "Products"))
+        {
+            @Html.HttpMethodOverride(HttpVerbs.Put)
+            @Html.ValidationSummary(false, "", new { @class = "text-danger" })
+            <br />
+            @Html.HiddenFor(m => m.ProductId)
+
+            @Html.Label("Title", "Titlu Produs")
+            <br />
+            @Html.EditorFor(m => m.Title, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(m => m.Title, null, new { @class = "text-danger" })
+            <br />
+            @Html.Label("Description", "Descriere Produs")
+            <br />
+            @Html.Editor("Description", new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(m => m.Description, null, new { @class = "text-danger" })
+            <br />
+            @Html.Label("Price", "Pret Produs")
+            <br />
+            @Html.Editor("Price", new { htmlAttributes = new { @class = "form-control", @type = "number" } })
+            @Html.ValidationMessageFor(m => m.Price, null, new { @class = "text-danger" })
+            <br />
+            <label>Selectati categoria</label>
+            @Html.DropDownListFor(m => m.CategoryId, new SelectList(Model.AllCategories, "Value", "Text"), "Selectati categoria", new { @class = "form-control" })
+            @Html.ValidationMessageFor(m => m.CategoryId, null, new { @class = "text-danger" })
+            <br />
+            <br />
+            <button class="btn btn-success" type="submit"><i class="glyphicon glyphicon-floppy-save"></i>&nbsp; Salveaza produs</button>
+        }
     </div>
-}
-
-<h2>@ViewBag.Title</h2>
-@using (Html.BeginForm(actionName: "Edit", controllerName: "Products"))
-{
-    @Html.HttpMethodOverride(HttpVerbs.Put)
-    @Html.ValidationSummary(false, "", new { @class = "text-danger" })
-    <br />
-    @Html.HiddenFor(m => m.ProductId)
-
-    @Html.Label("Title", "Titlu Produs")
-    <br />
-    @Html.EditorFor(m => m.Title, new { htmlAttributes = new { @class = "form-control" } })
-    @Html.ValidationMessageFor(m => m.Title, null, new { @class = "text-danger" })
-    <br />
-    @Html.Label("Description", "Descriere Produs")
-    <br />
-    @Html.Editor("Description", new { htmlAttributes = new { @class = "form-control" } })
-    @Html.ValidationMessageFor(m => m.Description, null, new { @class = "text-danger" })
-    <br />
-    @Html.Label("Price", "Pret Produs")
-    <br />
-    @Html.Editor("Price", new { htmlAttributes = new { @class = "form-control", @type = "number" } })
-    @Html.ValidationMessageFor(m => m.Price, null, new { @class = "text-danger" })
-    <br />
-    <label>Selectati categoria</label>
-    @Html.DropDownListFor(m => m.CategoryId, new SelectList(Model.AllCategories, "Value", "Text"), "Selectati categoria", new { @class = "form-control" })
-    @Html.ValidationMessageFor(m => m.CategoryId, null, new { @class = "text-danger" })
-    <br />
-    <br />
-    <button class="btn btn-success" type="submit"><i class="glyphicon glyphicon-floppy-save"></i>&nbsp; Salveaza produs</button>
-}
+</section>

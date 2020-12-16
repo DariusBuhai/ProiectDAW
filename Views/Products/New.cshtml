@@ -1,46 +1,50 @@
 ﻿@model ProiectDAW.Models.Product
 @{
-    ViewBag.Title = "Adaugare Produs";
+    ViewBag.Title = "Denumire Produs";
 }
 
-<h2>@ViewBag.Title</h2>
-<br />
-<a class="btn btn-primary" href="/Products/Index"><i class="glyphicon glyphicon-chevron-left"></i> Inapoi la produse</a>
-<br />
-<hr />
+<section class="bg-light py-10">
+    <div class="container">
+        <h2>@ViewBag.Title</h2>
+        <br />
+        <a class="btn btn-primary" href="/Products/Index"><i class="glyphicon glyphicon-chevron-left"></i> Inapoi la produse</a>
+        <br />
+        <hr />
 
-@if (TempData.ContainsKey("message"))
-{
-    <br />
-    <br />
-    <div class="alert alert-success">
-        @ViewBag.message
+        @if (TempData.ContainsKey("message"))
+        {
+            <br />
+            <br />
+            <div class="alert alert-success">
+                @ViewBag.message
+            </div>
+        }
+
+
+        <form method="POST" action="/Products/New">
+
+            @Html.ValidationSummary(false, "", new { @class = "text-danger" })
+            @Html.Label("Title", "Titlu Produs")
+            <br />
+            @Html.TextBox("Title", null, new { @class = "form-control" })
+            @Html.ValidationMessageFor(m => m.Title, null, new { @class = "text-danger" })
+            <br />
+            @Html.Label("Description", "Descriere Produs")
+            <br />
+            @Html.TextArea("Description", null, new { @class = "form-control" })
+            @Html.ValidationMessageFor(m => m.Description, null, new { @class = "text-danger" })
+            <br />
+            @Html.Label("Price", "Pret Produs")
+            <br />
+            @Html.TextBox("Price", null, new { @class = "form-control", @type = "number" })
+            @Html.ValidationMessageFor(m => m.Price, null, new { @class = "text-danger" })
+            <br />
+            @Html.Label("Selectati Categoria")
+            <br />
+            @Html.DropDownListFor(m => m.CategoryId, new SelectList(Model.AllCategories, "Value", "Text"), "Selectati categoria", new { @class = "form-control" })
+            @Html.ValidationMessageFor(m => m.CategoryId, null, new { @class = "text-danger" })
+            <br />
+            <button class="btn btn-success" type="submit"><i class="glyphicon glyphicon-plus-sign"></i>&nbsp; Adauga Produs</button>
+        </form>
     </div>
-}
-
-
-<form method="POST" action="/Products/New">
-
-    @Html.ValidationSummary(false, "", new { @class = "text-danger" })
-    @Html.Label("Title", "Titlu Produs")
-    <br />
-    @Html.TextBox("Title", null, new { @class = "form-control" })
-    @Html.ValidationMessageFor(m => m.Title, null, new { @class = "text-danger" })
-    <br />
-    @Html.Label("Description", "Descriere Produs")
-    <br />
-    @Html.TextArea("Description", null, new { @class = "form-control" })
-    @Html.ValidationMessageFor(m => m.Description, null, new { @class = "text-danger" })
-    <br />
-    @Html.Label("Price", "Pret Produs")
-    <br />
-    @Html.TextBox("Price", null, new { @class = "form-control", @type = "number" })
-    @Html.ValidationMessageFor(m => m.Price, null, new { @class = "text-danger" })
-    <br />
-    @Html.Label("Selectati Categoria")
-    <br />
-    @Html.DropDownListFor(m => m.CategoryId, new SelectList(Model.AllCategories, "Value", "Text"), "Selectati categoria", new { @class = "form-control" })
-    @Html.ValidationMessageFor(m => m.CategoryId, null, new { @class = "text-danger" })
-    <br />
-    <button class="btn btn-success" type="submit"><i class="glyphicon glyphicon-plus-sign"></i>&nbsp; Adauga Produs</button>
-</form>
+</section>
