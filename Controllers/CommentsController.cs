@@ -47,8 +47,7 @@ namespace ProiectDAW.Controllers
         public ActionResult Edit(int id)
         {
             Comment comm = db.Comments.Find(id);
-            ViewBag.Comment = comm;
-            return View();
+            return View(comm);
         }
 
         [HttpPut]
