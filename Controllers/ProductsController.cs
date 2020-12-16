@@ -16,23 +16,6 @@ namespace ProiectDAW.Controllers
         {
             var products = db.Products.Include("Category").Include("User");
             ViewBag.Products = products;
-            var NrComments = 0;
-            foreach (Product prod in db.Products)
-            {
-                NrComments = 0;
-                foreach (Comment comm in db.Comments)
-                {
-                    if (comm.ProductId == prod.ProductId)
-                    {
-                        prod.FinalRating += comm.Rating;
-                        NrComments += 1;
-                    }
-                }
-                if (NrComments != 0)
-                    prod.FinalRating = prod.FinalRating / NrComments;
-                else
-                    prod.FinalRating = 0;
-            }
             if (TempData.ContainsKey("message"))
                 ViewBag.Message = TempData["message"];
             return View();
@@ -50,10 +33,7 @@ namespace ProiectDAW.Controllers
                     NrComments += 1;
                 }
             }
-            if (NrComments != 0)
-                product.FinalRating = product.FinalRating / NrComments;
-            else
-                product.FinalRating = 0;
+            product.FinalRating = product.FinalRating / NrComments;
             return View(product);
         }
 
@@ -122,7 +102,7 @@ namespace ProiectDAW.Controllers
         {
             Product product = db.Products.Find(id);
             product.AllCategories = GetAllCategories();
-            if (product.UserId == User.Identity.GetUserId() || User.IsInRole("Admin"))
+            if(product.UserId == User.Identity.GetUserId() || User.IsInRole("Admin"))
                 return View(product);
             TempData["message"] = "Nu aveti dreptul sa faceti modificari asupra unui produs care nu va apartine!";
             return RedirectToAction("Index");

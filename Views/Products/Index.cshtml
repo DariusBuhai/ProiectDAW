@@ -27,47 +27,32 @@
 {
     if (product.Approved)
     {
-<div class="panel panel-default">
-    <div class="panel-heading">
-        @product.Title
-        <div class="pull-right">
-            @for (int i = 1; i <= 5; i++)
-            {
-                if (i <= product.FinalRating)
+        <div class="panel panel-default">
+            <div class="panel-heading">@product.Title</div>
+
+            <div class="panel-body">
+                <strong class="pull-left">@product.Description</strong>
+                <br /><hr />
+                <span><i class="glyphicon glyphicon-bitcoin"></i> &nbsp;Pret: @product.Price lei</span>
+                <br /><br /><span><i class="glyphicon glyphicon-globe"></i> &nbsp;Categorie: @product.Category.CategoryName</span>
+                <br />
+            </div>
+
+            <div class="panel-footer">
+                <a class="btn btn-primary btn-sm" href="/Products/Show/@product.ProductId"><i class="glyphicon glyphicon-eye-open"></i> &nbsp;Vizualizare</a>
+                @if (User.IsInRole("Editor") || User.IsInRole("Admin"))
                 {
-                    <i class="glyphicon glyphicon-star"></i>
+                    <a class="btn btn-success btn-sm" href="/Products/Edit/@product.ProductId"><i class="glyphicon glyphicon-edit"></i> &nbsp;Editare</a>
+                    <form class="pull-right" method="post" action="/Products/Delete/@product.ProductId">
+                        @Html.HttpMethodOverride(HttpVerbs.Delete)
+                        &nbsp;&nbsp;<button type="submit" class="btn btn-danger btn-sm"><i class="glyphicon glyphicon-trash"></i> &nbsp;Sterge produs</button>
+                    </form>
                 }
-                else
-                {
-                    <i class="glyphicon glyphicon-star-empty"></i>
-                }
-            }
+                <form class="pull-right" method="post" action="/Orders/Basket/@product.ProductId">
+                    <button type="submit" class="btn btn-success btn-sm"><i class="glyphicon glyphicon-shopping-cart"></i> &nbsp;Adauga in cos</button>
+                </form>
+            </div>
         </div>
-    </div>
-
-    <div class="panel-body">
-        <strong class="pull-left">@product.Description</strong>
-        <br /><hr />
-        <span><i class="glyphicon glyphicon-bitcoin"></i> &nbsp;Pret: @product.Price lei</span>
-        <br /><br /><span><i class="glyphicon glyphicon-globe"></i> &nbsp;Categorie: @product.Category.CategoryName</span>
-        <br />
-    </div>
-
-    <div class="panel-footer">
-        <a class="btn btn-primary btn-sm" href="/Products/Show/@product.ProductId"><i class="glyphicon glyphicon-eye-open"></i> &nbsp;Vizualizare</a>
-        @if (User.IsInRole("Editor") || User.IsInRole("Admin"))
-        {
-            <a class="btn btn-success btn-sm" href="/Products/Edit/@product.ProductId"><i class="glyphicon glyphicon-edit"></i> &nbsp;Editare</a>
-            <form class="pull-right" method="post" action="/Products/Delete/@product.ProductId">
-                @Html.HttpMethodOverride(HttpVerbs.Delete)
-                &nbsp;&nbsp;<button type="submit" class="btn btn-danger btn-sm"><i class="glyphicon glyphicon-trash"></i> &nbsp;Sterge produs</button>
-            </form>
-        }
-        <form class="pull-right" method="post" action="/Orders/Basket/@product.ProductId">
-            <button type="submit" class="btn btn-success btn-sm"><i class="glyphicon glyphicon-shopping-cart"></i> &nbsp;Adauga in cos</button>
-        </form>
-    </div>
-</div>
     }
 }
 <br />
