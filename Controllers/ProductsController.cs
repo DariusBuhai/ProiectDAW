@@ -10,12 +10,26 @@ namespace ProiectDAW.Controllers
 {
     public class ProductsController : Controller
     {
-        private Models.ApplicationDbContext db = new ApplicationDbContext();
+        private ApplicationDbContext db = new ApplicationDbContext();
         // GET: Products
         public ActionResult Index()
         {
-            var products = db.Products.Include("Category").Include("User");
+            var search = Request.Params["search"];
+            var sort = Request.Params["sort"];
+            if (search == null)
+                search = "";
+            if (sort == null)
+                sort = "";
+            var products = db.Products.Include("Category").Include("User").Where(product => product.Title.Contains(search));
             ViewBag.Products = products;
+            if (sort == "price-asc")
+                products = products.OrderBy(product => product.Price);
+            if (sort == "price-desc")
+                products = products.OrderByDescending(product => product.Price);
+            if (sort == "rating-asc")
+                products = products.OrderBy(product => product.FinalRating);
+            if (sort == "rating-desc")
+                products = products.OrderByDescending(product => product.FinalRating);
             var NrComments = 0;
             foreach (Product prod in db.Products)
             {
@@ -35,6 +49,8 @@ namespace ProiectDAW.Controllers
             }
             if (TempData.ContainsKey("message"))
                 ViewBag.Message = TempData["message"];
+            ViewBag.Search = search;
+            ViewBag.Sort = sort;
             return View();
         }
         // Get: Product

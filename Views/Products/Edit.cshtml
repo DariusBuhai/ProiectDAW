@@ -43,7 +43,7 @@
                         @Html.DropDownListFor(m => m.CategoryId, new SelectList(Model.AllCategories, "Value", "Text"), "Selectati categoria", new { @class = "form-control" })
                         @Html.ValidationMessageFor(m => m.CategoryId, null, new { @class = "text-danger" })
                     </div>
-                    <button type="submit" class="btn btn-primary btn-marketing btn-block mt-5"><i class="glyphicon glyphicon-plus-sign"></i>&nbsp; Salveaza Produs</button>
+                    <button type="submit" class="btn btn-success btn-marketing btn-block mt-5"><i class="glyphicon glyphicon-floppy-disk"></i>&nbsp; Salveaza Produs</button>
 
                 }
                 <form method="post" action="/Products/Delete/@Model.ProductId">
