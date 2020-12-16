@@ -1,35 +1,55 @@
 ﻿
 @{
-    ViewBag.Title = "Lista categorii";
+    ViewBag.Title = "Administrare categorii";
 }
 
 <section class="bg-light py-10">
     <div class="container">
         @if (TempData.ContainsKey("message"))
         {
-            <h1>@ViewBag.message</h1>
+            <div class="alert alert-success">@ViewBag.message</div>
         }
 
         <h2>@ViewBag.Title</h2>
         <hr />
+
         @foreach (var category in ViewBag.Categories)
         {
-            <strong><i class="glyphicon glyphicon-globe"></i>&nbsp; @category.CategoryName</strong>
-            <br />
-            <br />
-            <form method="post" action="/Categories/Delete/@category.CategoryId">
+            <form method="post" id="deleteForm_@category.CategoryId" action="/Categories/Delete/@category.CategoryId">
                 @Html.HttpMethodOverride(HttpVerbs.Delete)
-                <button class="btn btn-danger btn-sm" type="submit"><i class="glyphicon glyphicon-trash"></i>&nbsp; Stergere</button>
-                &nbsp;<a class="btn btn-success btn-sm" href="/Categories/Edit/@category.CategoryId"><i class="glyphicon glyphicon-edit"></i>&nbsp; Editare</a>
             </form>
+            <form method="post" action="/Categories/Edit/@category.CategoryId">
+                @Html.HttpMethodOverride(HttpVerbs.Put)
 
-            <hr />
-            <br />
+                <input value="@category.CategoryId" hidden name="CategoryId" />
+                <div class="input-group mb-2">
+                    <input value="@category.CategoryName" name="CategoryName" class="form-control bg-white form-control-solid" placeholder="Denumire categorie" />
+                    <div class="input-group-append">
+                        <button type="submit" class="btn btn-success"><i class="glyphicon glyphicon-edit"></i>&nbsp; Salveaza</button>
+                        <a class="btn btn-danger" href="javascript:document.getElementById('deleteForm_@category.CategoryId').submit()"><i class="glyphicon glyphicon-trash"></i>&nbsp; Sterge</a>
+                    </div>
+                </div>
+            </form>
         }
         <br />
-        <a class="btn btn-success" href="/Categories/New"><i class="glyphicon glyphicon-plus-sign"></i> &nbsp;Adauga categorie</a>
-        <a class="btn btn-primary" href="/Products/Index"><i class="glyphicon glyphicon-list"></i> &nbsp;Lista produse</a>
-        <br />
+        <div class="card mb-n5 z-1">
+            <div class="card-body p-5">
+                <div class="row align-items-center">
+                    <div class="col-lg-6">
+                        <h4>Categorie noua</h4>
+                        <p class="lead text-gray-500 mb-0">Adauga o categorie noua instant!</p>
+                    </div>
+                    <div class="col-lg-6">
+                        <form method="post" action="/Categories/New">
+                            <div class="input-group mb-2">
+                                @Html.TextBox("CategoryName", null, new { @class = "form-control form-control-solid", placeholder = "Denumire" })
+                                <div class="input-group-append"><button class="btn btn-primary" id="button-addon2" type="submit">Adaugare categorie</button></div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </section>
 
