@@ -33,7 +33,10 @@ namespace ProiectDAW.Controllers
                     NrComments += 1;
                 }
             }
-            product.FinalRating = product.FinalRating / NrComments;
+            if (NrComments > 0)
+                product.FinalRating = product.FinalRating / NrComments;
+            else
+                product.FinalRating = 0;
             return View(product);
         }
 
