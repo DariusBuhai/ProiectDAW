@@ -3,63 +3,80 @@
     ViewBag.Title = "Produse";
 }
 
+<section class="bg-light py-10">
+    <div class="container">
 
-@if (TempData.ContainsKey("message"))
-{
-    <br />
-    <br />
-    <div class="alert alert-success">
-        @ViewBag.message
+        @if (TempData.ContainsKey("message"))
+        {
+            <br />
+            <br />
+            <div class="alert alert-success">
+                @ViewBag.message
+            </div>
+        }
+        <br />
+        <h2>@ViewBag.Title - Magazin Online</h2>
+        <br />
+        @if (User.IsInRole("Admin"))
+        {
+            <a class="btn btn-primary disabled" disabled href="#"><i class="glyphicon glyphicon-ok-circle"></i> &nbsp;Produse Aprobate</a>
+            <a class="btn btn-primary" href="/Products/Approve"><i class="glyphicon glyphicon-time"></i> &nbsp;Produse in Asteptare</a>
+            <br />
+            <hr />
+        }
+
+        @foreach (var product in ViewBag.Products)
+        {
+            if (product.Approved)
+            {
+                <div class="card post-preview post-preview-featured lift mb-5">
+                    <div class="row no-gutters">
+                        <div class="col-lg-5"><div class="post-preview-featured-img" style="background-image: url(&quot;https://source.unsplash.com/vZJdYl5JVXY/660x360&quot;)"></div></div>
+                        <div class="col-lg-7">
+                            <div class="card-body">
+                                <div class="py-5">
+                                    <h5 class="card-title">@product.Title</h5>
+                                    <p class="card-text">@product.Description</p>
+                                    <span><i class="glyphicon glyphicon-bitcoin"></i> &nbsp;Pret: @product.Price lei</span>
+                                    <br /><br /><span><i class="glyphicon glyphicon-globe"></i> &nbsp;Categorie: @product.Category.CategoryName</span>
+                                </div>
+                                <hr>
+                                <div class="post-preview-meta row">
+                                    <div class="col-md-6">
+                                        <a class="btn btn-primary btn-sm" href="/Products/Show/@product.ProductId"><i class="glyphicon glyphicon-eye-open"></i> &nbsp;Vizualizare</a>
+                                        @if (User.IsInRole("Editor") || User.IsInRole("Admin"))
+                                        {
+                                            <a class="btn btn-success btn-sm" href="/Products/Edit/@product.ProductId"><i class="glyphicon glyphicon-edit"></i> &nbsp;Editare</a>
+                                        }
+                                    </div>
+                                    <div class="col-md-6 text-right">
+                                        @if (User.IsInRole("Editor") || User.IsInRole("Admin"))
+                                        {
+                                            <form class="float-right" method="post" action="/Products/Delete/@product.ProductId">
+                                                @Html.HttpMethodOverride(HttpVerbs.Delete)
+                                                &nbsp;&nbsp;<button type="submit" class="btn btn-danger btn-sm"><i class="glyphicon glyphicon-trash"></i> &nbsp;Sterge produs</button>
+                                            </form>
+                                        }
+                                        <form method="post" action="/Orders/Basket/@product.ProductId">
+                                            <button type="submit" class="btn btn-success btn-sm"><i class="glyphicon glyphicon-shopping-cart"></i> &nbsp;Adauga in cos</button>
+                                        </form>
+                                    </div>
+
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        }
+        <br />
+        <hr />
+
+        @if (User.IsInRole("Editor") || User.IsInRole("Admin"))
+        {
+            <a class="btn btn-primary" href="/Products/New"><i class="glyphicon glyphicon-plus-sign"></i> &nbsp;Produs Nou</a>
+        }
     </div>
-}
-<br />
-<h2>@ViewBag.Title - Magazin Online</h2>
-<br />
-@if (User.IsInRole("Admin"))
-{
-    <a class="btn btn-primary" disabled href="#"><i class="glyphicon glyphicon-ok-circle"></i> &nbsp;Produse Aprobate</a>
-    <a class="btn btn-primary" href="/Products/Approve"><i class="glyphicon glyphicon-time"></i> &nbsp;Produse in Asteptare</a>
-    <br />
-    <hr />
-}
-
-@foreach (var product in ViewBag.Products)
-{
-    if (product.Approved)
-    {
-        <div class="panel panel-default">
-            <div class="panel-heading">@product.Title</div>
-
-            <div class="panel-body">
-                <strong class="pull-left">@product.Description</strong>
-                <br /><hr />
-                <span><i class="glyphicon glyphicon-bitcoin"></i> &nbsp;Pret: @product.Price lei</span>
-                <br /><br /><span><i class="glyphicon glyphicon-globe"></i> &nbsp;Categorie: @product.Category.CategoryName</span>
-                <br />
-            </div>
-
-            <div class="panel-footer">
-                <a class="btn btn-primary btn-sm" href="/Products/Show/@product.ProductId"><i class="glyphicon glyphicon-eye-open"></i> &nbsp;Vizualizare</a>
-                @if (User.IsInRole("Editor") || User.IsInRole("Admin"))
-                {
-                    <a class="btn btn-success btn-sm" href="/Products/Edit/@product.ProductId"><i class="glyphicon glyphicon-edit"></i> &nbsp;Editare</a>
-                    <form class="pull-right" method="post" action="/Products/Delete/@product.ProductId">
-                        @Html.HttpMethodOverride(HttpVerbs.Delete)
-                        &nbsp;&nbsp;<button type="submit" class="btn btn-danger btn-sm"><i class="glyphicon glyphicon-trash"></i> &nbsp;Sterge produs</button>
-                    </form>
-                }
-                <form class="pull-right" method="post" action="/Orders/Basket/@product.ProductId">
-                    <button type="submit" class="btn btn-success btn-sm"><i class="glyphicon glyphicon-shopping-cart"></i> &nbsp;Adauga in cos</button>
-                </form>
-            </div>
-        </div>
-    }
-}
-<br />
-<hr />
-
-@if (User.IsInRole("Editor") || User.IsInRole("Admin"))
-{
-    <a class="btn btn-primary" href="/Products/New"><i class="glyphicon glyphicon-plus-sign"></i> &nbsp;Produs Nou</a>
-}
+</section>
 
