@@ -5,120 +5,102 @@
 }
 <section class="bg-light py-10">
     <div class="container">
-        <br />
-        <a class="btn btn-primary pull-left" href="/Products/Index"><i class="glyphicon glyphicon-chevron-left"></i>&nbsp; Inapoi la produse</a>
-        <a class="btn btn-success pull-right" href="/Products/New"><i class="glyphicon glyphicon-plus-sign"></i>&nbsp; Adauga produs nou</a>
-        <br />
-        <br />
-        <hr />
-        <div class="panel panel-default">
-            <div class="panel-heading">@Model.Title</div>
-            <div class="panel-body">
-                <div class="pull-right">
-                    @for (int i = 1; i <= 5; i++)
+        <div class="row justify-content-center">
+            <div class="col-lg-10 col-xl-8">
+                <div class="single-post">
+                    <div class="float-right">
+                        @for (int i = 1; i <= 5; i++)
+                        {
+                            if (i <= @Model.FinalRating)
+                            {
+                                <i class="glyphicon glyphicon-star text-warning"></i>
+                            }
+                            else
+                            {
+                                <i class="glyphicon glyphicon-star-empty"></i>
+                            }
+                        }
+                    </div>
+                    <h1 class="mb-3">@Model.Title</h1>
+
+                    @if (User.IsInRole("Editor") || User.IsInRole("Admin"))
                     {
-                        if (i <= @Model.FinalRating)
-                        {
-                            <i class="glyphicon glyphicon-star"></i>
-                        }
-                        else
-                        {
-                            <i class="glyphicon glyphicon-star-empty"></i>
-                        }
+                        <form method="post" class="float-right" action="/Products/Delete/@Model.ProductId">
+                            @Html.HttpMethodOverride(HttpVerbs.Delete)
+                            <a class="btn btn-success btn-sm" href="/Products/Edit/@Model.ProductId"><i class="glyphicon glyphicon-edit"></i> &nbsp;Editeaza</a>
+                            <button class="btn btn-danger btn-sm" type="submit"><i class="glyphicon glyphicon-trash"></i> &nbsp;Sterge</button>
+                        </form>
                     }
-                </div>
-                <br />
-                <strong>@Model.Description</strong>
-                <br /><hr />
-                <span><i class="glyphicon glyphicon-bitcoin"></i> &nbsp;Pret: @Model.Price lei</span>
-                <br /><br />
-                <i class="glyphicon glyphicon-globe"></i> &nbsp;@Model.Category.CategoryName
-                <br /><br />
-            </div>
-            @if (User.IsInRole("Editor") || User.IsInRole("Admin"))
-            {
-                <div class="panel-footer">
-                    <a class="btn btn-success" href="/Products/Edit/@Model.ProductId"><i class="glyphicon glyphicon-edit"></i> &nbsp;Modifica produs</a>
-                    <form method="post" class="pull-right" action="/Products/Delete/@Model.ProductId">
-                        @Html.HttpMethodOverride(HttpVerbs.Delete)
-                        <button class="btn btn-danger " type="submit"><i class="glyphicon glyphicon-trash"></i> &nbsp;Sterge produs</button>
-                    </form>
-                </div>
-            }
-        </div>
+                    <p class="lead">@Model.Description</p>
 
-
-        <br />
-        @foreach (var comm in Model.Comments)
-        {
-            <div class="container">
-                <div class="row">
-                    <div class="col-md-2"></div>
-                    <div class="col-md-8">
+                    <span><i class="glyphicon glyphicon-bitcoin"></i> &nbsp;Pret: @Model.Price lei</span><br />
+                    <span><i class="glyphicon glyphicon-globe"></i> &nbsp;Categorie: @Model.Category.CategoryName</span>
+                    <br /><br />
+                    <img class="img-fluid mb-2" src="https://source.unsplash.com/vZJdYl5JVXY/990x540">
+                    <div class="small text-gray-500 text-center">Postat de: @Model.User.UserName</div>
+                    <br />
+                    <div class="post-archive-tag">Review-uri</div>
+                    @foreach (var comm in Model.Comments)
+                    {
                         <div>
-                            <small align="right">
-                                @for (int i = 1; i <= 5; i++)
-                                {
-                                    if (i <= comm.Rating)
-                                    {
-                                        <i class="glyphicon glyphicon-star"></i>
-                                    }
-                                    else
-                                    {
-                                        <i class="glyphicon glyphicon-star-empty"></i>
-                                    }
-                                }
-                            </small><br>
-                            <p>@comm.Content</p>
-                            <small class="pull-right"><i class="glyphicon glyphicon-calendar"></i> &nbsp;@comm.Date</small>
-                        </div>
-                        @if (User.IsInRole("Editor") || User.IsInRole("Admin") || User.IsInRole("User"))
-                        {
-                            <div style="display: inline-block; float : left; margin-right: 15px">
-                                <a class="glyphicon glyphicon-pencil" href="/Comments/Edit/@comm.CommentId"></a>
-                            </div>
-                            <div style="display: inline-block; float : left">
-                                <form method="post" action="/Comments/Delete/@comm.CommentId">
+                            @if (User.IsInRole("Editor") || User.IsInRole("Admin") || User.IsInRole("User"))
+                            {
+                                <form class="float-right" method="post" action="/Comments/Delete/@comm.CommentId">
                                     @Html.HttpMethodOverride(HttpVerbs.Delete)
-                                    <button class="glyphicon glyphicon-trash" style="border: none; background: transparent" type="submit"></button>
+                                    <a class="btn btn-success btn-sm" href="/Comments/Edit/@comm.CommentId"><i class="glyphicon glyphicon-pencil"></i></a>
+                                    <button class="btn btn-danger btn-sm" type="submit"><i class="glyphicon glyphicon-trash"></i></button>
                                 </form>
-                            </div>
-                        }
-                    </div>
-                </div>
-                <div class="col-md-2"></div>
-            </div>
-            <hr />
-        }
-
-
-        @if (User.IsInRole("Editor") || User.IsInRole("Admin") || User.IsInRole("User"))
-        {
-            <div class="container">
-                <div class="row">
-                    <div class="col-md-2">
-                    </div>
-                    <div class="col-md-8">
-                        <div class="panel">
-                            <form method="post" action="/Comments/New">
-                                <div class="panel-body">
-                                    <input type="hidden" name="ProductId" value="@Model.ProductId" />
-                                    <label>Continut comentariu</label>
-                                    <br />
-                                    <textarea class="form-control" name="Content"></textarea>
-                                    <br />
-                                    <label for="rating">Rating produs(intre 1 si 5):</label>
-                                    <br />
-                                    <input type="number" id="rating" name="Rating" min="1" max="5">
-                                    <br /> <br />
-                                    <button class="btn btn-success " type="submit"><i class="glyphicon glyphicon-plus"></i> &nbsp;Adauga comentariu</button>
+                            }
+                            <a class="post-archive-item" href="#!">
+                                <h5>
+                                    <small align="right">
+                                        @for (int i = 1; i <= 5; i++)
+                                        {
+                                            if (i <= comm.Rating)
+                                            {
+                                                <i class="glyphicon glyphicon-star text-warning"></i>
+                                            }
+                                            else
+                                            {
+                                                <i class="glyphicon glyphicon-star-empty"></i>
+                                            }
+                                        }
+                                    </small>
+                                </h5>
+                                <p>@comm.Content</p>
+                            </a>
+                            <div class="post-archive-meta">
+                                <div class="post-archive-meta-details">
+                                    <div class="post-archive-meta-details-date">@comm.Date</div>
                                 </div>
+                            </div>
+
+                        </div>
+                        <hr class="my-5">
+                    }
+
+
+                    <div class="card bg-white shadow-none">
+                        <div class="card-body align-items-center justify-content-between p-4">
+                            @if (User.IsInRole("Editor") || User.IsInRole("Admin") || User.IsInRole("User"))
+                            {
+                            <form method="post" action="/Comments/New">
+                                <input type="hidden" name="ProductId" value="@Model.ProductId" />
+                                <label>Continut comentariu</label>
+                                <br />
+                                <textarea class="form-control" name="Content"></textarea>
+                                <br /><label for="rating">Rating produs (intre 1 si 5):</label>
+                                <br />
+                                <input type="number"  value="1" class="form-control" id="rating" name="Rating" min="1" max="5">
+                                <br /><button class="btn btn-success btn-block" type="submit"><i class="glyphicon glyphicon-plus"></i> &nbsp;Adauga comentariu</button>
                             </form>
+                            }
                         </div>
                     </div>
-                    <div class="col-md-2"></div>
+                    <hr class="my-5">
+                    <div class="text-center"><a class="btn btn-black btn-marketing rounded-pill" href="/Products/Index">Inapoi la Pagina de Produse</a></div>
                 </div>
             </div>
-        }
+        </div>
     </div>
 </section>
