@@ -18,7 +18,8 @@
                             <ul class="navbar-nav ml-auto mr-lg-5">
                                 @if (User.IsInRole("Admin"))
                                 {
-                                    <li class="nav-item">@Html.ActionLink("Editare Categorii", "Index", "Categories", null, new { @class = "nav-link" })</li>
+                                    <li class="nav-item">@Html.ActionLink("Categorii", "Index", "Categories", null, new { @class = "nav-link" })</li>
+                                    <li class="nav-item">@Html.ActionLink("Utilizatori", "Index", "Users", null, new { @class = "nav-link" })</li>
                                 }
 
                                 @if (User.IsInRole("Editor") || User.IsInRole("Admin"))
