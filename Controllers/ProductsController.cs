@@ -2,6 +2,7 @@
 using ProiectDAW.Models;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -21,7 +22,7 @@ namespace ProiectDAW.Controllers
             if (sort == null)
                 sort = "";
             var products = db.Products.Include("Category").Include("User").Where(product => product.Title.Contains(search));
-            ViewBag.Products = products;
+            CalculateProductsFinalRatings(products);
             if (sort == "price-asc")
                 products = products.OrderBy(product => product.Price);
             if (sort == "price-desc")
@@ -30,46 +31,35 @@ namespace ProiectDAW.Controllers
                 products = products.OrderBy(product => product.FinalRating);
             if (sort == "rating-desc")
                 products = products.OrderByDescending(product => product.FinalRating);
-            var NrComments = 0;
-            foreach (Product prod in db.Products)
-            {
-                NrComments = 0;
-                foreach (Comment comm in db.Comments)
-                {
-                    if (comm.ProductId == prod.ProductId)
-                    {
-                        prod.FinalRating += comm.Rating;
-                        NrComments += 1;
-                    }
-                }
-                if (NrComments != 0)
-                    prod.FinalRating = prod.FinalRating / NrComments;
-                else
-                    prod.FinalRating = 0;
-            }
+            //foreach (Product prod in products)
+            //    Debug.WriteLine(prod.FinalRating);
+            ViewBag.Products = products;
             if (TempData.ContainsKey("message"))
                 ViewBag.Message = TempData["message"];
             ViewBag.Search = search;
             ViewBag.Sort = sort;
             return View();
         }
-        // Get: Product
-        public ActionResult Show(int id)
+        private void CalculateProductsFinalRatings(IQueryable<Product> products)
         {
-            var product = db.Products.Find(id);
-            var NrComments = 0;
-            foreach (Comment comm in db.Comments)
-            {
-                if (comm.ProductId == product.ProductId)
-                {
-                    product.FinalRating += comm.Rating;
-                    NrComments += 1;
-                }
-            }
+            foreach (Product prod in products)
+                CalculateProductFinalRating(prod);
+        }
+        private void CalculateProductFinalRating(Product product)
+        {
+            var NrComments = product.Comments.Count;
+            foreach (Comment comm in product.Comments)
+                product.FinalRating += comm.Rating;
             if (NrComments != 0)
                 product.FinalRating = product.FinalRating / NrComments;
             else
                 product.FinalRating = 0;
+        }
+        // Get: Product
+        public ActionResult Show(int id)
+        {
+            var product = db.Products.Find(id);
+            CalculateProductFinalRating(product);
             return View(product);
         }
 
