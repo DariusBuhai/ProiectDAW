@@ -5,6 +5,7 @@ using System.Web;
 using System.Data.Entity;
 using System.ComponentModel.DataAnnotations;
 using System.Web.Mvc;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ProiectDAW.Models
 {
@@ -32,5 +33,7 @@ namespace ProiectDAW.Models
         public int Status { get; set; }
         public virtual ICollection<Comment> Comments { get; set; }
         public bool Approved { get; set; }
+        [NotMapped]
+        public HttpPostedFileBase ImageFile { get; set; }
     }
 }

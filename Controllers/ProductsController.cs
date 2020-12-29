@@ -3,6 +3,7 @@ using ProiectDAW.Models;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -81,6 +82,14 @@ namespace ProiectDAW.Controllers
             product.AllCategories = GetAllCategories();
             product.UserId = User.Identity.GetUserId();
             product.Approved = User.IsInRole("Admin");
+
+            string fileName = Path.GetFileNameWithoutExtension(product.ImageFile.FileName);
+            string fileExtension = Path.GetExtension(product.ImageFile.FileName);
+            fileName = fileName + DateTime.Now.ToString("yymmssfff") + fileExtension;
+            product.Image = "~/Files/" + fileName;
+            fileName = Path.Combine(Server.MapPath("~/Files/"), fileName);
+            product.ImageFile.SaveAs(fileName);
+
             try
             {
                 if (ModelState.IsValid)
