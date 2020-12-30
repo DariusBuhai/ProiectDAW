@@ -8,6 +8,7 @@
 
         <div class="d-flex align-items-center justify-content-between">
             <h6 class="mb-0">@ViewBag.Title - Magazin Online</h6>
+            <p>Pret total: <span>@ViewBag.TotalPrice lei</span></p>
         </div>
         <hr class="mb-4">
 
@@ -50,10 +51,8 @@
         }
         <br />
 
-        <div class="card-body bg-white d-flex align-items-center justify-content-between p-4" style="border-radius:5px">
-            <p class="lead mb-0">Urmatorul pas:</p>
-            <a class="btn btn-success btn-marketing rounded-pill ml-2" href="#"><i class="glyphicon glyphicon-shopping-cart"></i> &nbsp;Spre checkout</a>
-        </div>
+        <div class="text-center"><a class="btn btn-danger btn-marketing rounded-pill" href="/Basket/Empty"><span class="glyphicon glyphicon-trash"></span>&nbsp; Golese cos</a></div>
+        
     </div>
 </section>
 

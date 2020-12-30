@@ -13,7 +13,8 @@
             <main>
                 <nav class="navbar navbar-marketing navbar-expand-lg navbar-dark bg-black fixed-top">
                     <div class="container">
-                        <a class="navbar-brand" href="/">Magazin Online</a><button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><i data-feather="menu"></i></button>
+                        <a class="navbar-brand" href="/">Magazin Online</a>
+                        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><i class="glyphicon glyphicon-menu-hamburger"></i></button>
                         <div class="collapse navbar-collapse" id="navbarSupportedContent">
                             <ul class="navbar-nav ml-auto mr-lg-5">
                                 @if (User.IsInRole("Admin"))
@@ -29,11 +30,13 @@
 
                                 <li class="nav-item">@Html.ActionLink("Produse", "Index", "Products", null, new { @class = "nav-link" })</li>
                                 @Html.Partial("_LoginPartial")
+
                             </ul>
 
                         </div>
                     </div>
                 </nav>
+
                 <br /><br />
                 @RenderBody()
 
@@ -55,7 +58,7 @@
             </main>
         </div>
     </div>
-                
-                    
+
+
 </body>
 </html>
