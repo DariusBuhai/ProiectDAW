@@ -30,10 +30,10 @@
                 <div class="input-group-prepend show">
                     <select name="sort" class="btn btn-primary" onchange="document.getElementById('searchForm').submit()">
                         <option value="" class="bg-white text-black">Sorteaza dupa</option>
-                        <option value="price-asc" @(ViewBag.sort=="price-asc"?"selected":"") class="bg-white text-black">Pret crescator</option>
-                        <option value="price-desc" @(ViewBag.sort=="price-desc"?"selected":"") class="bg-white text-black">Pret descrescator</option>
-                        <option value="rating-asc" @(ViewBag.sort=="rating-asc"?"selected":"") class="bg-white text-black">Rating crescator</option>
-                        <option value="rating-desc" @(ViewBag.sort=="rating-desc"?"selected":"") class="bg-white text-black">Rating descrescator</option>
+                        <option value="price-asc" @(ViewBag.sort == "price-asc" ? "selected" : "") class="bg-white text-black">Pret crescator</option>
+                        <option value="price-desc" @(ViewBag.sort == "price-desc" ? "selected" : "") class="bg-white text-black">Pret descrescator</option>
+                        <option value="rating-asc" @(ViewBag.sort == "rating-asc" ? "selected" : "") class="bg-white text-black">Rating crescator</option>
+                        <option value="rating-desc" @(ViewBag.sort == "rating-desc" ? "selected" : "") class="bg-white text-black">Rating descrescator</option>
                     </select>
                 </div>
 
@@ -48,13 +48,13 @@
             {
                 <div class="card post-preview post-preview-featured lift mb-5">
                     <div class="row no-gutters">
-                        <div class="col-lg-5"><div>
-                             <img class="post-preview-featured-img" src="@Url.Content(product.Image)"/>
-                             </div></div>
+                        <div class="col-lg-5">
+                            <a href="/Products/Show/@product.ProductId"><div class="post-preview-featured-img" style="background-image: url(&quot;@Url.Content(product.Image)&quot;)"></div></a>
+                        </div>
                         <div class="col-lg-7">
                             <div class="card-body">
                                 <div class="pb-5">
-                                    @if (User.IsInRole("Editor") || User.IsInRole("Admin"))
+                                    @if ((User.IsInRole("Editor") && product.UserId == ViewBag.UserId) || User.IsInRole("Admin"))
                                     {
                                         <form class="float-right" method="post" action="/Products/Delete/@product.ProductId">
                                             @Html.HttpMethodOverride(HttpVerbs.Delete)
@@ -83,12 +83,13 @@
                                 </div>
                                 <div class=" row">
                                     <div class="col-md-6">
-                                        <a class="text-arrow-icon small" href="/Products/Show/@product.ProductId">Vizualizare &nbsp;<i class="glyphicon glyphicon-arrow-right"></i></a>
+                                        <a class="text-arrow-icon small" style="text-decoration:none" href="/Products/Show/@product.ProductId">Vizualizare &nbsp;<i class="glyphicon glyphicon-arrow-right"></i></a>
                                     </div>
                                     <div class="col-md-6">
-                                        <form class="float-right" method="post" action="/Orders/Basket/@product.ProductId">
+                                        <a class="btn btn-success btn-sm float-right" href="/Basket/Index/@product.ProductId"><i class="glyphicon glyphicon-shopping-cart"></i> &nbsp;Adauga in cos</a>
+                                        <!--<form class="float-right" method="post" action="/Basket/Index/@product.ProductId">
                                             <button type="submit" class="btn btn-success btn-sm"><i class="glyphicon glyphicon-shopping-cart"></i> &nbsp;Adauga in cos</button>
-                                        </form>
+                                        </form>-->
                                     </div>
                                 </div>
                             </div>

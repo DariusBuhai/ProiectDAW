@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using Microsoft.AspNet.Identity;
 
 namespace ProiectDAW.Controllers
 {
@@ -21,8 +22,14 @@ namespace ProiectDAW.Controllers
         public ActionResult Delete(int id)
         {
             Comment comm = db.Comments.Find(id);
-            db.Comments.Remove(comm);
-            db.SaveChanges();
+            if (comm.UserId == User.Identity.GetUserId() || User.IsInRole("Admin"))
+            {
+                db.Comments.Remove(comm);
+                db.SaveChanges();
+                TempData["message"] = "Comentariu sters!";
+            }
+            else
+                TempData["message"] = "Nu aveti dreptul sa stergeti un comentariu care nu va apartine!";
             return Redirect("/Products/Show/" + comm.ProductId);
         }
 
@@ -30,6 +37,7 @@ namespace ProiectDAW.Controllers
         public ActionResult New(Comment comm)
         {
             comm.Date = DateTime.Now;
+            comm.UserId = User.Identity.GetUserId();
             try
             {
                 db.Comments.Add(comm);
@@ -47,7 +55,11 @@ namespace ProiectDAW.Controllers
         public ActionResult Edit(int id)
         {
             Comment comm = db.Comments.Find(id);
-            return View(comm);
+            comm.UserId = User.Identity.GetUserId();
+            if (comm.UserId == User.Identity.GetUserId() || User.IsInRole("Admin"))
+                return View(comm);
+            TempData["message"] = "Nu aveti dreptul sa faceti modificari asupra unui comentariu care nu va apartine!";
+            return Redirect("/Products/Show/"+comm.ProductId);
         }
 
         [HttpPut]
@@ -56,13 +68,20 @@ namespace ProiectDAW.Controllers
             try
             {
                 Comment comm = db.Comments.Find(id);
-                if (TryUpdateModel(comm))
+                if (comm.UserId == User.Identity.GetUserId() || User.IsInRole("Admin"))
                 {
-                    comm.Content = requestComment.Content;
-                    comm.Rating = requestComment.Rating;
-                    comm.Date = DateTime.Now;
-                    db.SaveChanges();
+                    if (TryUpdateModel(comm))
+                    {
+                        comm.Content = requestComment.Content;
+                        comm.Rating = requestComment.Rating;
+                        comm.Date = DateTime.Now;
+                        TempData["message"] = "Comentariu modificat.";
+                        db.SaveChanges();
+                        
+                    }
                 }
+                else
+                    TempData["message"] = "Nu aveti dreptul sa faceti modificari asupra unui comentariu care nu va apartine!";
                 return Redirect("/Products/Show/" + comm.ProductId);
             }
             catch (Exception e)

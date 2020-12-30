@@ -37,6 +37,7 @@ namespace ProiectDAW.Controllers
             ViewBag.Products = products;
             if (TempData.ContainsKey("message"))
                 ViewBag.Message = TempData["message"];
+            ViewBag.UserId = User.Identity.GetUserId();
             ViewBag.Search = search;
             ViewBag.Sort = sort;
             return View();
@@ -46,7 +47,7 @@ namespace ProiectDAW.Controllers
             foreach (Product prod in products)
                 CalculateProductFinalRating(prod);
         }
-        private void CalculateProductFinalRating(Product product)
+        static public void CalculateProductFinalRating(Product product)
         {
             var NrComments = product.Comments.Count;
             foreach (Comment comm in product.Comments)
@@ -61,6 +62,9 @@ namespace ProiectDAW.Controllers
         {
             var product = db.Products.Find(id);
             CalculateProductFinalRating(product);
+            if (TempData.ContainsKey("message"))
+                ViewBag.Message = TempData["message"];
+            ViewBag.UserId = User.Identity.GetUserId();
             return View(product);
         }
 
