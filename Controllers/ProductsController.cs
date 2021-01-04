@@ -22,18 +22,16 @@ namespace ProiectDAW.Controllers
                 search = "";
             if (sort == null)
                 sort = "";
-            var products = db.Products.Include("Category").Include("User").Where(product => product.Title.Contains(search));
+            var products = db.Products.Include("Category").Include("User").Where(product => product.Title.Contains(search)).ToList();
             CalculateProductsFinalRatings(products);
             if (sort == "price-asc")
-                products = products.OrderBy(product => product.Price);
+                products = products.OrderBy(product => product.Price).ToList();
             if (sort == "price-desc")
-                products = products.OrderByDescending(product => product.Price);
+                products = products.OrderByDescending(product => product.Price).ToList();
             if (sort == "rating-asc")
-                products = products.OrderBy(product => product.FinalRating);
+                products = products.OrderBy(product => product.FinalRating).ToList();
             if (sort == "rating-desc")
-                products = products.OrderByDescending(product => product.FinalRating);
-            //foreach (Product prod in products)
-            //    Debug.WriteLine(prod.FinalRating);
+                products = products.OrderByDescending(product => product.FinalRating).ToList();
             ViewBag.Products = products;
             if (TempData.ContainsKey("message"))
                 ViewBag.Message = TempData["message"];
@@ -42,7 +40,7 @@ namespace ProiectDAW.Controllers
             ViewBag.Sort = sort;
             return View();
         }
-        private void CalculateProductsFinalRatings(IQueryable<Product> products)
+        private void CalculateProductsFinalRatings(List<Product> products)
         {
             foreach (Product prod in products)
                 CalculateProductFinalRating(prod);
@@ -87,17 +85,12 @@ namespace ProiectDAW.Controllers
             product.UserId = User.Identity.GetUserId();
             product.Approved = User.IsInRole("Admin");
 
-            string fileName = Path.GetFileNameWithoutExtension(product.ImageFile.FileName);
-            string fileExtension = Path.GetExtension(product.ImageFile.FileName);
-            fileName = fileName + DateTime.Now.ToString("yymmssfff") + fileExtension;
-            product.Image = "~/Files/" + fileName;
-            fileName = Path.Combine(Server.MapPath("~/Files/"), fileName);
-            product.ImageFile.SaveAs(fileName);
-
             try
             {
                 if (ModelState.IsValid)
                 {
+                    UploadProductImage(product);
+
                     db.Products.Add(product);
                     db.SaveChanges();
                     TempData["message"] = "Produsul a fost adaugat!";
@@ -157,11 +150,15 @@ namespace ProiectDAW.Controllers
             {
                 if (ModelState.IsValid)
                 {
+                    if(requestProduct.ImageFile != null)
+                        UploadProductImage(requestProduct);
+
                     Product product = db.Products.Find(id);
                     if (product.Approved != requestProduct.Approved && !User.IsInRole("Admin"))
                         requestProduct.Approved = product.Approved;
                     if (product.UserId == User.Identity.GetUserId() || User.IsInRole("Admin"))
                     {
+                        product.Image = requestProduct.Image;
                         if (TryUpdateModel(product))
                         {
                             product = requestProduct;
@@ -227,6 +224,16 @@ namespace ProiectDAW.Controllers
             }
             // returnam lista de categorii
             return selectList;
+        }
+
+        private void UploadProductImage(Product product)
+        {
+            string fileName = Path.GetFileNameWithoutExtension(product.ImageFile.FileName);
+            string fileExtension = Path.GetExtension(product.ImageFile.FileName);
+            fileName = fileName + DateTime.Now.ToString("yymmssfff") + fileExtension;
+            product.Image = "~/Files/" + fileName;
+            fileName = Path.Combine(Server.MapPath("~/Files/"), fileName);
+            product.ImageFile.SaveAs(fileName);
         }
     }
 }
