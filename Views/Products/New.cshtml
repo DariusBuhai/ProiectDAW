@@ -41,8 +41,9 @@
                         @Html.ValidationMessageFor(m => m.CategoryId, null, new { @class = "text-danger" })
                     </div>
                     <div class="form-group">
-                        @Html.Label("Incarcat Imaginea", null, new { @class = "small text-gray-600" })
-                        <input type="file" name="ImageFile" required />
+                        @Html.Label("Incarcati Imagine: ", null, new { @class = "small text-gray-600" })
+                        &nbsp;&nbsp; <input type="file" id="upload-image" name="ImageFile" required />
+                        <!--<label for="upload-image" class="btn btn-success btn-sm mt-2"><span class="glyphicon glyphicon-upload"></span>&nbsp; Incarcati Imagine</label>-->
                     </div>
                     <button type="submit" class="btn btn-primary btn-marketing btn-block mt-5"><i class="glyphicon glyphicon-plus-sign"></i>&nbsp; Adauga Produs</button>
 
