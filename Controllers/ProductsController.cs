@@ -158,7 +158,8 @@ namespace ProiectDAW.Controllers
                         requestProduct.Approved = product.Approved;
                     if (product.UserId == User.Identity.GetUserId() || User.IsInRole("Admin"))
                     {
-                        product.Image = requestProduct.Image;
+                        if (requestProduct.ImageFile != null)
+                            product.Image = requestProduct.Image;
                         if (TryUpdateModel(product))
                         {
                             product = requestProduct;
